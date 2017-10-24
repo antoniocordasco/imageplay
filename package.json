@@ -1,0 +1,15 @@
+{
+  "name": "imageplay",
+  "version": "1.0.0",
+  "description": "just a simple app to experiment with image manipulation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "jimp": "^0.2.28"
+  }
+}
