@@ -53,11 +53,11 @@ app.post('/upload', function(req, res) {
       }).then((existingImage) => {
 
         console.log('read existing image');
-        merge(newImage, existingImage).write('mask.png', () => {
-          console.log('merged');
+        merge(newImage, existingImage).write(path.join(__dirname, '/assets/merged/') + newImageFilename, () => {
+          res.redirect('http://localhost:3000/result');
         });
-      });
 
+      });
     });
   });
 
@@ -66,7 +66,6 @@ app.post('/upload', function(req, res) {
   });
 
   form.on('end', function() {
-    res.redirect('localhost:3000');
   });
 
   form.parse(req);

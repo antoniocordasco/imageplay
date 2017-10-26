@@ -1,2 +1,5 @@
 node_modules
 assets/uploads/*
+!assets/uploads/.gitkeep 
+assets/merged/*
+!assets/merged/.gitkeep 
