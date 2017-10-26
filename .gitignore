@@ -3,3 +3,4 @@ assets/uploads/*
 !assets/uploads/.gitkeep 
 assets/merged/*
 !assets/merged/.gitkeep 
+**/.DS_Store
