@@ -5,7 +5,7 @@ class MergedImage extends Component {
 
     render() {
       return (
-        <div>
+        <div>            
             <img src={this.props.imagePath} />
         </div>
       );

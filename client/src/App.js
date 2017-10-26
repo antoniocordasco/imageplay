@@ -3,23 +3,31 @@ import logo from './logo.svg';
 import FormComponent from './Form';
 import MergedImage from './MergedImage';
 import { Cookies } from 'react-cookie';
+import { BrowserRouter,  Route,  Link } from 'react-router-dom'
 import './App.css';
 
 class App extends Component {
   render() {
 
     var cookies = new Cookies();
-    var imagePath = 'http://localhost:5000/assets/merged/' + cookies.get('newImageFilename');
+    var imagePath = '/assets/merged/' + cookies.get('newImageFilename');
+
+
+    const MergedImageWithPath = (props) => {
+      return (
+        <MergedImage imagePath={imagePath} />
+      );
+    }
 
     return (
-      <div className="App">
-        <header className="App-header">
-        </header>
-
-        <FormComponent path="/"/>
-        <MergedImage path="/result" imagePath={imagePath} />
-
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <header className="App-header">
+          </header>
+          <Route exact path="/" component={FormComponent}/>
+          <Route exact path="/result" component={MergedImageWithPath}  />
+        </div>
+      </BrowserRouter>
     );
   }
 }
