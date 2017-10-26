@@ -11,6 +11,7 @@ const fs = Promise.promisifyAll(require('fs'));
 
 
 
+app.use("/assets", express.static(__dirname + '/assets'));
 
 app.get('/', function(req, res) {
   res.send('Hello World!');
@@ -38,6 +39,7 @@ app.post('/upload', function(req, res) {
   
       var newImage;
       var newImageFilename = md5(Date.now()) + '.jpg';
+      res.cookie('newImageFilename',newImageFilename);
 
       fs.renameAsync(file.path, path.join(form.uploadDir, newImageFilename)).then(() => {
 
