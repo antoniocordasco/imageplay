@@ -1,10 +1,16 @@
 const Jimp = require('jimp');
 const merge = require('./helpers/merge');
 const express = require('express');
-const fs = require('fs');
 var path = require('path');
 const formidable = require('formidable');
 const app = express();
+const md5 = require('md5');
+const _ = require('lodash');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
+
+
+
 
 app.get('/', function(req, res) {
   res.send('Hello World!');
@@ -15,9 +21,43 @@ app.post('/upload', function(req, res) {
 
   form.uploadDir = path.join(__dirname, '/assets/uploads');
 
+  
+
   form.on('file', function(field, file) {
-    fs.rename(file.path, path.join(form.uploadDir, file.name), () => {
-      fs.unlink(file.path, err => {});
+
+
+
+    fs.readdirAsync(form.uploadDir).then((items) => {
+      
+      // filtering out all the files that are not jpegs
+      items = _.filter(items, function(item) { return (item.indexOf('.jpg') === item.length - 4); });
+      
+      // choosing a random image from the existing ones
+      var existingImageFilename = items[Math.floor(Math.random() * items.length)];
+      
+  
+      var newImage;
+      var newImageFilename = md5(Date.now()) + '.jpg';
+
+      fs.renameAsync(file.path, path.join(form.uploadDir, newImageFilename)).then(() => {
+
+        fs.unlink(file.path, err => {});
+        return Jimp.read(form.uploadDir + '/' + newImageFilename);
+
+      }).then((image) => {
+
+        console.log('read new image');
+        newImage = image;
+        return Jimp.read(form.uploadDir + '/' + existingImageFilename);   
+
+      }).then((existingImage) => {
+
+        console.log('read existing image');
+        merge(newImage, existingImage).write('mask.png', () => {
+          console.log('merged');
+        });
+      });
+
     });
   });
 
@@ -36,16 +76,3 @@ app.listen(5000, function() {
   console.log('server listening on port 5000!');
 });
 
-//
-// // open a file called "lenna.png"
-// Jimp.read('assets/images/deadend.png', function(err, deadend) {
-//   if (err) throw err;
-//
-//   Jimp.read('assets/images/donotenter.png', function(err, donotenter) {
-//     if (err) throw err;
-//
-//     merge(donotenter, deadend).write('mask.png', () => {
-//       console.log('merged');
-//     });
-//   });
-// });
