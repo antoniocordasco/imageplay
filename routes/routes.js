@@ -18,15 +18,17 @@ module.exports = app => {
       fs.readdirAsync(form.uploadDir).then(items => {
         // filtering out all the files that are not jpegs
         items = _.filter(items, function(item) {
-          return item.indexOf(".jpg") === item.length - 4;
+          return [".jpg", ".png"].includes(path.extname(item));
         });
+
+        console.log(items);
 
         // choosing a random image from the existing ones
         var existingImageFilename =
           items[Math.floor(Math.random() * items.length)];
 
         var newImage;
-        var newImageFilename = md5(Date.now()) + ".jpg";
+        var newImageFilename = md5(Date.now()) + path.extname(file.name);
         res.cookie("newImageFilename", newImageFilename);
 
         fs
@@ -36,13 +38,15 @@ module.exports = app => {
             return Jimp.read(form.uploadDir + "/" + newImageFilename);
           })
           .then(image => {
-            console.log("read new image");
+            console.log("resizing new image");
             newImage = image.resize(190, 190);
 
+            console.log("writing new image");
             // we are not chaining the promise of write() here, because the image object has already been resized
             // we can write the file in parallel, we don't have to wait for it to finish before proceeding
             newImage.write(form.uploadDir + "/" + newImageFilename);
 
+            console.log("reading new image");
             return Jimp.read(form.uploadDir + "/" + existingImageFilename);
           })
           .then(existingImage => {
