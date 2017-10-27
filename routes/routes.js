@@ -1,12 +1,12 @@
-const Jimp = require('jimp');
-const merge = require('../helpers/merge');
-const express = require('express');
-const path = require('path');
-const formidable = require('formidable');
-const md5 = require('md5');
-const _ = require('lodash');
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
+const Jimp = require("jimp");
+const merge = require("../helpers/merge");
+const express = require("express");
+const path = require("path");
+const formidable = require("formidable");
+const md5 = require("md5");
+const _ = require("lodash");
+const Promise = require("bluebird");
+const fs = Promise.promisifyAll(require("fs"));
 
 module.exports = app => {
   app.post("/upload", function(req, res) {
@@ -37,7 +37,12 @@ module.exports = app => {
           })
           .then(image => {
             console.log("read new image");
-            newImage = image;
+            newImage = image.resize(190, 190);
+
+            // we are not chaining the promise of write() here, because the image object has already been resized
+            // we can write the file in parallel, we don't have to wait for it to finish before proceeding
+            newImage.write(form.uploadDir + "/" + newImageFilename);
+
             return Jimp.read(form.uploadDir + "/" + existingImageFilename);
           })
           .then(existingImage => {
