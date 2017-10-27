@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class ImageUploadForm extends Component {
   render() {
@@ -8,8 +8,13 @@ class ImageUploadForm extends Component {
         method="post"
         enctype="multipart/form-data"
       >
-        <input type="file" name="fileToUpload" id="fileToUpload" />
-        <input type="submit" value="Upload Image" name="submit" />
+        <p>Please choose an image to upload</p>
+        <div>
+          <input type="file" name="fileToUpload" id="fileToUpload" />
+        </div>
+        <div>
+          <input type="submit" value="Upload Image" name="submit" />
+        </div>
       </form>
     );
   }

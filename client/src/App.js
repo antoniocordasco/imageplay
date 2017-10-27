@@ -23,7 +23,6 @@ class App extends Component {
           </header>
 
           <div>
-            <p>Please choose an image to upload</p>
             <Route exact path="/" component={FormComponent} />
             <Route exact path="/result" component={MergedImageWithPath} />
           </div>

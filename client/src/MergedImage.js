@@ -5,7 +5,8 @@ class MergedImage extends Component {
 
     render() {
       return (
-        <div>            
+        <div>   
+            <p><a href="/">Upload a new image</a></p>         
             <img src={this.props.imagePath} />
         </div>
       );
